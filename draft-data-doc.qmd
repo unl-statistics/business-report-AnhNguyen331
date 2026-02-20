@@ -1,3 +1,79 @@
 ---
 title: "Draft: Data Documentation"
 ---
+
+# Draft Data Documentation - Omaha Bridge Risk Assessment
+
+### Business Question
+
+What is the risk of a bridge collapse in Omaha over the next five years, and what interventions should be implemented?
+
+### Research Question
+
+Based on publicly available inspection and transportation data, what is the estimated probability of structural bridge failure in Omaha, and which bridges present the greatest risk when considering both likelihood and consequence?
+
+### Dataset
+
+#### Dataset 1: Nebraska Department of Transportation Bridge Report
+
+**Source:** Nebraska Department of Transportation (NDOT), Bridge Condition Reports (March 2025)
+
+**Access:** Publicly available PDF reports on the NDOT website
+
+**URL**: 1. <https://dot.nebraska.gov/media/mopjemdw/bridge-condition-report-summary.pdf>
+
+2.  <https://dot.nebraska.gov/media/4efjqkfa/bridge-condition-locally-owned.pdf>
+
+**Unit of Analysis:** Bridge systems by ownership category (State, County, City, NHS)
+
+**Key Variables:**
+
+-   Total number of bridges by system/owner
+
+-   Percentage of bridges classified as Good, Fair, or Poor
+
+-   Percentage of Closed bridges
+
+-   Percentage of bridges with Low Load Ratings
+
+-   Total bridge deck area (square feet)
+
+**Relevance to Research Question:**
+
+This dataset provides statewide and system-level context for evaluating Omaha’s bridge risk. It allows comparison between City of Omaha bridges and state averages, helping assess whether local infrastructure conditions are above or below statewide norms. It also supports consequence analysis by distinguishing between state, county, and National Highway System bridges, which differ significantly in economic and transportation impact.
+
+#### Dataset 2: FHWA National Bridge Inventory (NBI) – Nebraska, 2025
+
+**Source:** Federal Highway Administration (FHWA)\
+**Access:** Publicly available delimited text file\
+**URL:** <https://www.fhwa.dot.gov/bridge/nbi/2025/delimited/NE25.txt>
+
+**Unit of Analysis:** Individual bridge records in the state of Nebraska
+
+### **Key Variables:**
+
+-   Unique bridge identifier (Structure ID)
+
+-   Year built and year reconstructed
+
+-   Deck, superstructure, and substructure condition ratings
+
+-   Structural evaluation and load capacity ratings
+
+-   Average Daily Traffic (ADT)
+
+-   Functional classification (Interstate, arterial, local road, etc.)
+
+-   National Highway System (NHS) designation
+
+-   County and geographic location information
+
+-   Inspection dates
+
+**Relevance to Research Question:**
+
+This dataset provides detailed bridge-level data necessary to evaluate both the probability and consequences of bridge failure. Condition ratings and load capacity measures serve as indicators of structural vulnerability, while traffic volume and NHS designation help assess the potential economic and transportation impact of a collapse.
+
+The dataset enables filtering for bridges located in Omaha or Douglas County, allowing for localized risk assessment and comparison with statewide infrastructure conditions.
+
+------------------------------------------------------------------------
