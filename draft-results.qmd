@@ -171,13 +171,6 @@ Across the bridges in the sample, the average structural condition ratings are a
 ```{r,echo=FALSE, warning=FALSE}
 #| fig-cap: "Figure 1. Distribution of Bridge Deck Condition Ratings in Douglas County, Nebraska."
 
-douglas_bridges %>%
-  summarise(
-    avg_deck = mean(DECK_COND_058, na.rm = TRUE),
-    avg_super = mean(SUPERSTRUCTURE_COND_059, na.rm = TRUE),
-    avg_sub = mean(SUBSTRUCTURE_COND_060, na.rm = TRUE)
-  )
-
 ggplot(douglas_bridges, aes(x = DECK_COND_058)) +
   geom_histogram(binwidth = 1) +
   labs(
@@ -222,8 +215,7 @@ ggplot(douglas_bridges, aes(x = factor(DECK_COND_058), y = ADT_029, fill = facto
   scale_y_log10() +
   labs(
     x = "Deck Condition Rating (0 = Failed, 9 = Excellent)",
-    y = "Average Daily Traffic (Log Scale)",
-    fill = "Condition Rating"
+    y = "Average Daily Traffic (Log Scale)"
   ) +
   theme_minimal()
 ```
