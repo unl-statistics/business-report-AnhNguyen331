@@ -5,7 +5,7 @@ editor:
     wrap: sentence
 ---
 
-# Datas & Methods
+# Data & Methods
 
 The analysis uses publicly available bridge inspection and transportation datasets from the **Federal Highway Administration** and summary reports from the **Nebraska Department of Transportation**.
 These datasets contain information on bridge conditions, construction characteristics, and traffic volumes for bridges across the United States.
@@ -32,10 +32,25 @@ The datasets include several variables relevant to evaluating bridge safety and 
 
 -   Bridge Dimensions and Characteristics: Additional variables such as bridge length, roadway width, and number of spans describe the structural characteristics of each bridge
 
+
+::: callout-note
+
+How many of these values are missing? Is there any relationship between missingness? (e.g. you might imagine smaller bridges might not have some of the measurements?)
+
+Cite your data sources as bibliographic references. Additionally include the URLs to the data as footnotes^[This is how you add a footnote in quarto] the first time you mention e.g. how it was downloaded. Be explicit - your goal is to make sure someone can follow your instructions and reproduce your analysis.
+
+:::
+
 ## Data Collection and Preparation
 
 The Nebraska National Bridge Inventory dataset was downloaded in delimited text format and converted into a CSV file for analysis.
 The dataset was then imported into the R programming environment.
+
+::: callout-note
+
+It's not a bad idea to save your `sessionInfo()` in an appendix and reference the appendix here so that people know exactly what versions of each package you were using.
+
+:::
 
 To focus on the study area, bridges located in Douglas County were selected using the county code variable.
 Data cleaning steps were performed to prepare the dataset for statistical analysis.
@@ -73,6 +88,12 @@ The analysis was conducted in R using several packages for data management and v
 
 -   **knitr:** Used to generate the final report and integrate code with written analysis.
 
+::: callout-note
+
+You should cite these packages so that the citation shows up in the bibliography in addition to mentioning them in the text. Citations are basically currency for academics - citing the packages you use is like tipping your waiter :).
+
+:::
+
 ## Analytical Approach
 
 To estimate bridge collapse risk and identify vulnerable structures, several statistical analyses were conducted:
@@ -85,6 +106,12 @@ To estimate bridge collapse risk and identify vulnerable structures, several sta
 
 -   Combined risk assessment identified bridges that simultaneously exhibit lower structural condition ratings and high traffic volumes.
     These bridges represent the greatest infrastructure risk because they combine higher likelihood of structural problems with greater transportation impact.
+
+::: callout-note
+
+It might be helpful to provide a bit more detail about what models you used here.
+
+:::
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(readr)
@@ -151,25 +178,40 @@ high_risk <- douglas_bridges %>%
 Bridge inspection data from the Federal Highway Administration were analyzed for bridges located in Douglas County, which includes the city of Omaha.
 A total of 8 bridges were included in the dataset used for analysis.
 
+```{r}
+adt_values <- c(min(douglas_bridges$traffic), max(douglas_bridges$traffic), median(douglas_bridges$traffic), mean(douglas_bridges$traffic))
+```
+
 Traffic volumes vary substantially across bridges.
-Average Daily Traffic (ADT) ranges from 25 vehicles per day to 182,320 vehicles per day, with a median of 15,750 vehicles per day and an average of 36,947 vehicles per day.
+Average Daily Traffic (ADT) ranges from `r adt_values[1]` vehicles per day to `r adt_values[2]` vehicles per day, with a median of `r adt_values[3]` vehicles per day and an average of `r adt_values[4]` vehicles per day.
 Bridge age ranges from 2 to 106 years, with a median age of 39 years.
 
-Table 1 summarizes the key descriptive statistics for traffic volume and bridge age.
+@tbl-summary-stats summarizes the key descriptive statistics for traffic volume and bridge age.
 
 | Variable              | Min | Median | Mean   | Max     |
 |-----------------------|-----|--------|--------|---------|
 | Average Daily Traffic | 25  | 15,750 | 36,947 | 182,320 |
 | Bridge Age (years)    | 2   | 39     | 41     | 106     |
 
+: Caption for this table {#tbl-summary-stats}
+
+::: callout-note
+
+Please generate this table reproducibly using R or python. Include a table reference (I've added it above) and caption. Do not ever hardcode table labels (Table 1) -- that should be generated on compilation. I've modified your code to show you how to do this - please replace my caption with one that's a bit more useful.
+
+Your average daily traffic stats should also be calculated in a chunk and then filled in interactively -- you'll need to modify the chunk so that it references the right variable and possibly add , na.rm=T as an argument, but I've tried to demonstrate the syntax. You can put it into practice by also changing bridge age. Also, please use 'mean' instead of 'average' as the median, mean, and mode can be considered averages.
+
+:::
+
 ## Structural Condition  
 
 Structural conditions were evaluated using inspection ratings for bridge decks, superstructures, and substructures. These ratings range from 0 (failed condition) to 9 (excellent condition).
 
-Across the bridges in the sample, the average structural condition ratings are approximately 6, indicating that most bridges fall within the fair condition category. Figure 1 illustrates the distribution of deck condition ratings across bridges.
+Across the bridges in the sample, the average structural condition ratings are approximately 6, indicating that most bridges fall within the fair condition category. @fig-dist-deck-condition illustrates the distribution of deck condition ratings across bridges.
 
 ```{r,echo=FALSE, warning=FALSE}
-#| fig-cap: "Figure 1. Distribution of Bridge Deck Condition Ratings in Douglas County, Nebraska."
+#| fig-cap: "Distribution of Bridge Deck Condition Ratings in Douglas County, Nebraska."
+#| label: fig-dist-deck-condition
 
 ggplot(douglas_bridges, aes(x = DECK_COND_058)) +
   geom_histogram(binwidth = 1) +
@@ -179,6 +221,16 @@ ggplot(douglas_bridges, aes(x = DECK_COND_058)) +
     y = "Number of Bridges"
   )
 ```
+
+::: callout-note
+
+Unless ratings are provided as decimals (e.g. 5.43), I would turn these into a factor variable and use a bar chart instead of a histogram to be more technically correct.
+
+You need to use the chunk parameter `label` and `@fig-label` to reference the figure - don't manually number figures within the caption or the text. Let your document software handle keeping track of that for you, so that if you rearrange the analysis order you don't have to manually do anything to fix the text.
+
+I'll fix the first figure, but you are responsible for fixing the rest of them.
+
+:::
 
 
 ## Traffic Exposure
@@ -206,6 +258,7 @@ Figure 2 shows the distribution of Average Daily Traffic (ADT) for bridges in Do
 The distribution indicates that most bridges carry moderate to high levels of traffic, with many bridges falling between 10,000 and 100,000 vehicles per day. A smaller number of bridges carry relatively low traffic volumes, while a few bridges support extremely high traffic levels exceeding 100,000 vehicles per day.
 
 ## Traffic by Bridge Condition
+
 ```{r}
 #| echo: false
 #| fig-cap: "Figure 3. Relationship between bridge structural condition and traffic exposure in Douglas County, Nebraska."
@@ -219,4 +272,16 @@ ggplot(douglas_bridges, aes(x = factor(DECK_COND_058), y = ADT_029, fill = facto
   ) +
   theme_minimal()
 ```
+
 The box plot shows that bridges across multiple condition ratings carry a wide range of traffic volumes. While many bridges with moderate condition ratings (around 5–7) carry relatively moderate traffic levels, several bridges with similar condition ratings support substantially higher traffic volumes. The presence of high-traffic outliers indicates that som
+
+
+::: callout-note
+
+The text seems to have been cut off -- did you forget to push something?
+
+What you have here is closer to a methods section than a results section -- you need to spend more time interpreting your results. This also seems very formulaic -- as if it could have been produced by an AI. I'm not accusing you of that, but I do think you should put a bit more of your personality into your writing style, even in a business report.
+
+What are your actual findings? That's what goes in the results section.
+
+:::
