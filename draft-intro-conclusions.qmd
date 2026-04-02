@@ -26,3 +26,9 @@ Based on the findings, the following are recommended:
 - **Prioritize Maintenance for High-Risk Bridges**: Given that only 16 out of 390 bridges were classified as high risk, resources should be focused on this small but critical subset. These bridges are generally older and in poorer condition, making them the most likely candidates for structural failure.
 
 - **Avoid Over-Reliance on Traffic Volume**: High-risk bridges were not necessarily those with the highest traffic volumes, indicating that usage alone is not a reliable indicator of risk. Maintenance strategies should therefore emphasize structural condition rather than traffic alone.
+
+::: callout-note
+
+Or, it's ok for less-used bridges to be in worse condition, as they have less potential economic disruption? Traffic load is a way to measure economic disruption, not a causal factor.
+:::
+:::

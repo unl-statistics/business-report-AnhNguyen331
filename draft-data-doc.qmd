@@ -75,3 +75,9 @@ This dataset provides statewide and system-level context for evaluating Omaha’
 This dataset provides detailed bridge-level data necessary to evaluate both the probability and consequences of bridge failure. Condition ratings and load capacity measures serve as indicators of structural vulnerability, while traffic volume and NHS designation help assess the potential economic and transportation impact of a collapse.
 
 The dataset enables filtering for bridges located in Omaha or Douglas County, allowing for localized risk assessment and comparison with statewide infrastructure conditions.
+
+::: callout-note
+
+Be sure you're using proper headers instead of relying on bold formatting, as discussed in class. You also need to use a bibliography and quarto citations instead of just providing URLs.
+
+:::
