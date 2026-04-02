@@ -1,0 +1,13 @@
+---
+title: "Session Information"
+format: html
+---
+
+# Session Information {#sec-appendix-session}
+
+The following records the R session information used to produce this analysis,
+including package versions and system details.
+```{r, echo=FALSE}
+library(sessioninfo)
+sessionInfo()
+```

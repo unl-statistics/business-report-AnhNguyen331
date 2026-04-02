@@ -3,6 +3,8 @@ title: "Draft: Results"
 editor: 
   markdown: 
     wrap: sentence
+    
+bibliography: references.bib
 ---
 
 # Data & Methods
@@ -14,8 +16,8 @@ The purpose of the analysis is to estimate the potential risk of bridge collapse
 
 ## Data Sources
 
--   National Bridge Inventory (NBI): A comprehensive dataset maintained by the Federal Highway Administration that includes inspection results, structural condition ratings, bridge dimensions, construction year, and traffic statistics for bridges in the United States.
--   Nebraska Department of Transportation Bridge Reports: Provides summary information on bridge conditions across Nebraska, including counts of structurally deficient or functionally obsolete bridges and maintenance planning data. These datasets are publicly available and widely used in transportation safety research and infrastructure planning.
+-   **National Bridge Inventory (NBI)**: A comprehensive dataset maintained by the @fhwaElement2025 that includes inspection results, structural condition ratings, bridge dimensions, construction year, and traffic statistics for bridges in the United States.^[The Nebraska NBI extract was downloaded from the FHWA bridge data portal at <https://www.fhwa.dot.gov/bridge/nbi/ascii.cfm>.]
+-   **Nebraska Department of Transportation Bridge Reports**: Provides summary information on bridge conditions across Nebraska, including counts of structurally deficient or functionally obsolete bridges and maintenance planning data [@BridgeNDOT]. ^[Reports are publicly available at <https://dot.nebraska.gov/media/4efjqkfa/bridge-condition-locally-owned.pdf>.]
 
 ::: callout-note
 
@@ -28,109 +30,82 @@ The purpose of the analysis is to estimate the potential risk of bridge collapse
 
 The datasets include several variables relevant to evaluating bridge safety and infrastructure risk:
 
--   Structural Condition Ratings: Includes inspection scores for deck condition `DECK_COND_058`, superstructure condition `SUPERSTRUCTURE_COND_059`, and substructure condition `SUBSTRUCTURE_COND_060`.
+-   **Structural Condition Ratings**: Includes inspection scores for deck condition `DECK_COND_058`, superstructure condition `SUPERSTRUCTURE_COND_059`, and substructure condition `SUBSTRUCTURE_COND_060`.
     These ratings range from 0 to 9, where higher values represent better structural condition.
 
--   Traffic Volume: Average Daily Traffic `ADT_029` estimates the number of vehicles crossing each bridge per day, indicating the level of transportation demand.
+-   **Traffic Volume**: Average Daily Traffic `ADT_029` estimates the number of vehicles crossing each bridge per day, indicating the level of transportation demand.
 
--   Bridge Age: Construction year `YEAR_BUILT_027` allows calculation of bridge age, which may influence structural deterioration over time.
+-   **Bridge Age**: Construction year `YEAR_BUILT_027` allows calculation of bridge age, which may influence structural deterioration over time.
 
--   Location Information: Geographic identifiers such as state code and county code allow bridges in Douglas County to be isolated for analysis.
+-   **Location Information**: Geographic identifiers such as state code and county code allow bridges in Douglas County to be isolated for analysis.
 
--   Bridge Dimensions and Characteristics: Additional variables such as bridge length, roadway width, and number of spans describe the structural characteristics of each bridge
+-   **Bridge Dimensions and Characteristics**: Additional variables such as bridge length, roadway width, and number of spans describe the structural characteristics of each bridge
 
 
-::: callout-note
+### Missing Data 
 
-How many of these values are missing? Is there any relationship between missingness? (e.g. you might imagine smaller bridges might not have some of the measurements?)
-
-Cite your data sources as bibliographic references. Additionally include the URLs to the data as footnotes^[This is how you add a footnote in quarto] the first time you mention e.g. how it was downloaded. Be explicit - your goal is to make sure someone can follow your instructions and reproduce your analysis.
-
-:::
+Prior to filteriing to Douglas County, a missing data assessment was conducted on the key structural condition variables. Missingess was observed primarily in the three condition rating fields (`DECK_COND_58`, `SUPERSTRUCTURE_COND_059`, `SUBSTRUCTURE_COND_060`) and in `ADT_029`. Bridges with missing values in any of these variables were excluded from analysis using `drop_na()`, as these fields are essential for risk classification. It is worth noting that missingness in condition ratings may not be random, smaller or lower-priority structures are sometimes exempt from full NBI inspection requirements, which could mean the excluded bridges are systematically different from those retained. This is a limitation of the analysis.
 
 ## Data Collection and Preparation
 
-The Nebraska National Bridge Inventory dataset was downloaded in delimited text format and converted into a CSV file for analysis.
-The dataset was then imported into the R programming environment.
+The Nebraska National Bridge Inventory dataset was downloaded in delimited text format and converted into a CSV file for analysis.The dataset was then imported into the R programming environment. Package versions and system information are documented in @sec-appendix-session
 
-::: callout-note
-
-It's not a bad idea to save your `sessionInfo()` in an appendix and reference the appendix here so that people know exactly what versions of each package you were using.
-
-:::
-
-To focus on the study area, bridges located in Douglas County were selected using the county code variable.
+To focus on the study area, bridges located in Douglas County were selected using the county code variable (`COUNTY_CODE_003 == 55`).
 Data cleaning steps were performed to prepare the dataset for statistical analysis.
 Several inspection variables were initially stored as character values and were converted to numeric format in order to calculate summary statistics.
-Missing or non-numeric values were treated as missing observations.
+Missing or non-numeric values were treated as missing observations and excluded.
 
 Additional variables were created to support analysis.
-Bridge age was calculated by subtracting the construction year from the current year.
+Bridge age was calculated by subtracting the construction year from the most current year (2025).
 This variable helps identify older infrastructure that may require increased maintenance or monitoring.
 
 ## Data Classification
 
 To evaluate structural risk, bridges were categorized according to their inspection ratings.
 
--   Higher-risk bridges: Bridges with structural condition ratings of 4 or lower in the deck, superstructure, or substructure categories.
-    These ratings indicate poor structural condition or advanced deterioration.
+-   **Higher-risk bridges**: Bridges with structural condition ratings of 4 or lower in the deck, superstructure, or substructure categories, indicating poor structural condition or advanced deterioration.
 
--   Moderate-condition bridges: Bridges with ratings between 5 and 6, indicating fair structural condition.
+-   **Moderate-condition bridges**: Bridges with ratings between 5 and 6, indicating fair structural condition.
 
--   Good-condition bridges: Bridges with ratings of 7 or higher, representing satisfactory or good structural performance.
+-   **Good-condition bridges**: Bridges with ratings of 7 or higher, representing satisfactory or good structural performance.
 
-This classification allows the analysis to identify bridges that may require additional inspection, repair, or replacement planning.
+This classification aligns with FHWA conventions for identifying structurally deficient bridges and allows the analysis to prioritize structure most in need of intervention.
 
 ## R packages and Software
 
-The analysis was conducted in R using several packages for data management and visualization:
+The analysis was conducted in R. Package versions are recorded in @sec-appendix-session. Key packages used include:
 
--   **readr:** Used to import the bridge inventory dataset into R.
+-   **readr:** Used to import the bridge inventory dataset into R [@wickhamReadrReadRectangular2026].
 
--   **tidyverse:** Used for data manipulation, filtering, and summarization.
+-   **tidyverse:** Used for data manipulation, filtering, and summarization [@wickhamTidyverseEasilyInstall2023].
 
--   **dplyr:** Used to calculate descriptive statistics and identify high-risk bridges.
+-   **dplyr:** Used to calculate descriptive statistics and identify high-risk bridges [@wickhamDplyrGrammarData2026].
 
--   **ggplot2:** Used to create visualizations of bridge condition ratings, traffic levels, and bridge age distributions.
+-   **ggplot2:** Used to create visualizations of bridge condition ratings, traffic levels, and bridge age distributions [@wickhamGgplot2CreateElegant2026].
 
--   **knitr:** Used to generate the final report and integrate code with written analysis.
+-   **knitr:** Used to generate the final report and integrate code with written analysis [@KnitrYihuiXie].
 
-::: callout-note
+- **scales**
 
-You should cite these packages so that the citation shows up in the bibliography in addition to mentioning them in the text. Citations are basically currency for academics - citing the packages you use is like tipping your waiter :).
-
-:::
 
 ## Analytical Approach
 
-To estimate bridge collapse risk and identify vulnerable structures, several statistical analyses were conducted:
-
--   Descriptive statistics were calculated to summarize the number of bridges, average structural condition ratings, bridge age, and traffic volume within Douglas County.
-
--   Condition rating analysis was performed to identify bridges with structural condition ratings indicating potential deterioration.
-
--   Traffic exposure analysis examined bridges with high average daily traffic to assess the potential consequences of structural failure.
-
--   Combined risk assessment identified bridges that simultaneously exhibit lower structural condition ratings and high traffic volumes.
-    These bridges represent the greatest infrastructure risk because they combine higher likelihood of structural problems with greater transportation impact.
-
-::: callout-note
-
-It might be helpful to provide a bit more detail about what models you used here.
-
-:::
+The analysis proceeded in three stages. First, descriptive statistics were calculated to characterize the full sample of Douglas County bridges on key variables: structural condition ratings, bridge age, and traffic volume. Second, a condition rating analysis identified bridges with ratings at or below 4 in any structural component, flagging them as higher-risk. Third, a combined risk assessment cross-tabulated structural condition against traffic exposure (ADT), since bridges that are both structurally compromised and heavily used represent the greatest public safety risk — high likelihood of failure combined with high consequence. Spearman correlation tests were used to assess the monotonic relationships between age, condition, and traffic, given the ordinal nature of the condition rating variables.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(readr)
 library(tidyverse)
 library(dplyr)
 library(ggplot2)
+library(knitr)
+library(scales)
+
 ```
 
 ```{r,echo=FALSE, warning=FALSE}
 inventory <- read.csv("data/national_bridge_inventory_ne.csv")
 
-bridges_clean <- inventory %>%
+douglas_bridges <- inventory %>%
   select(
     COUNTY_CODE_003,
     YEAR_BUILT_027,
@@ -144,125 +119,170 @@ bridges_clean <- inventory %>%
     BRIDGE_CONDITION,
     STRUCTURE_LEN_MT_049,
     DECK_AREA
-  )
-
-douglas_bridges <- bridges_clean %>%
+  ) %>%
   filter(COUNTY_CODE_003 == 55) %>%
-  filter(
-    !is.na(DECK_COND_058),
-    !is.na(SUPERSTRUCTURE_COND_059),
-    !is.na(SUBSTRUCTURE_COND_060)
-  )
-
-#bridge age
-douglas_bridges <- douglas_bridges %>%
-  mutate(bridge_age = 2026 - YEAR_BUILT_027)
+  mutate(
+    YEAR_BUILT_027 = as.numeric(YEAR_BUILT_027),
+    ADT_029 = as.numeric(ADT_029),
+    DECK_COND_058 = as.numeric(DECK_COND_058),
+    SUPERSTRUCTURE_COND_059 = as.numeric(SUPERSTRUCTURE_COND_059),
+    SUBSTRUCTURE_COND_060 = as.numeric(SUBSTRUCTURE_COND_060),
+    bridge_age = 2026 - YEAR_BUILT_027
+  ) %>%
+  drop_na(ADT_029, bridge_age, DECK_COND_058, SUPERSTRUCTURE_COND_059, SUBSTRUCTURE_COND_060)
 
 douglas_bridges <- douglas_bridges %>%
   mutate(
-    DECK_COND_058 = as.numeric(DECK_COND_058),
-    SUPERSTRUCTURE_COND_059 = as.numeric(SUPERSTRUCTURE_COND_059),
-    SUBSTRUCTURE_COND_060 = as.numeric(SUBSTRUCTURE_COND_060)) %>%
-  drop_na(DECK_COND_058, SUPERSTRUCTURE_COND_059, SUBSTRUCTURE_COND_060)
-
-
-
-high_risk <- douglas_bridges %>%
-  filter(
-    DECK_COND_058 <= 4 |
-    SUPERSTRUCTURE_COND_059 <= 4 |
-    SUBSTRUCTURE_COND_060 <= 4
+    risk_group = ifelse(
+      DECK_COND_058 <= 4 |
+      SUPERSTRUCTURE_COND_059 <= 4 |
+      SUBSTRUCTURE_COND_060 <= 4,
+      "High Risk",
+      "Lower Risk"
+    )
   )
-
-
-
 ```
 
+
+```{r, echo=FALSE}
+n_bridges <- nrow(douglas_bridges)
+
+adt_min <- min(douglas_bridges$ADT_029, na.rm = TRUE)
+adt_max <- max(douglas_bridges$ADT_029, na.rm = TRUE)
+adt_median <- median(douglas_bridges$ADT_029, na.rm = TRUE)
+adt_mean <- mean(douglas_bridges$ADT_029, na.rm = TRUE)
+
+age_min <- min(douglas_bridges$bridge_age, na.rm = TRUE)
+age_max <- max(douglas_bridges$bridge_age, na.rm = TRUE)
+age_median <- median(douglas_bridges$bridge_age, na.rm = TRUE)
+age_mean <- mean(douglas_bridges$bridge_age, na.rm = TRUE)
+
+deck_mean <- mean(douglas_bridges$DECK_COND_058, na.rm = TRUE)
+super_mean <- mean(douglas_bridges$SUPERSTRUCTURE_COND_059, na.rm = TRUE)
+sub_mean <- mean(douglas_bridges$SUBSTRUCTURE_COND_060, na.rm = TRUE)
+
+```
 # Results
 
 ## Study Sample Characteristics
 
-Bridge inspection data from the Federal Highway Administration were analyzed for bridges located in Douglas County, which includes the city of Omaha.
-A total of 8 bridges were included in the dataset used for analysis.
+Bridge inspection data from the Federal Highway Administration were analyzed for bridges located in Douglas County, which includes the city of Omaha. A total of `r n_bridges` bridges were included in the analysis after excluding records with missing values in key structural or traffic variables.
 
-```{r}
-adt_values <- c(min(douglas_bridges$traffic), max(douglas_bridges$traffic), median(douglas_bridges$traffic), mean(douglas_bridges$traffic))
+```{r, echo=FALSE, tbl-summary-stat}
+#| tbl-cap: "Descriptive statistics for traffic volume and bridge age among analyzed Douglas County bridges"
+
+summary_table <- tibble(
+  Variable = c("Daily Traffic Mean", "Bridge Age (years)"),
+  Min = c(adt_min, age_min),
+  Median = c(comma(adt_median, age_median)),
+  Mean = c(comma(adt_mean, age_mean)),
+  Max = c(comma(adt_max, age_max))
+)
+kable(summary_table, booktabs = TRUE, digits = 1,
+      format.args = list(big.mark = ","))
+
 ```
 
-Traffic volumes vary substantially across bridges.
-Average Daily Traffic (ADT) ranges from `r adt_values[1]` vehicles per day to `r adt_values[2]` vehicles per day, with a median of `r adt_values[3]` vehicles per day and an average of `r adt_values[4]` vehicles per day.
-Bridge age ranges from 2 to 106 years, with a median age of 39 years.
+As shown in @tbl-summary-stat, Average Daily Traffic ranged from `r comma(adt_min)` to `r comma(adt_max)` vehicles per day, with a median of `r comma(round(adt_median, 0))` and a mean of `r comma(round(adt_mean, 0))`. This wide spread reflects the mix of major arterial crossings and minor local bridges in Douglas County
 
-@tbl-summary-stats summarizes the key descriptive statistics for traffic volume and bridge age.
+Bridge age ranged from `r age_min` to `r age_max` years, with a median of `r round(age_median, 1)` years and a mean of `r round(age_mean, 1)` years. The relatively high mean age suggests that a substantial portion of the county's bridge inventory predates modern design standards and may face greater maintenance demands.
 
-| Variable              | Min | Median | Mean   | Max     |
-|-----------------------|-----|--------|--------|---------|
-| Average Daily Traffic | 25  | 15,750 | 36,947 | 182,320 |
-| Bridge Age (years)    | 2   | 39     | 41     | 106     |
+The mean deck, superstructure, and substructure ratings were `r round(deck_mean, 2)`, `r round(super_mean, 2)`, and `r round(sub_mean, 2)`, respectively, all falling within the "fair" range (5-6) on the 0-9 NBI scale.
 
-: Caption for this table {#tbl-summary-stats}
-
-::: callout-note
-
-Please generate this table reproducibly using R or python. Include a table reference (I've added it above) and caption. Do not ever hardcode table labels (Table 1) -- that should be generated on compilation. I've modified your code to show you how to do this - please replace my caption with one that's a bit more useful.
-
-Your average daily traffic stats should also be calculated in a chunk and then filled in interactively -- you'll need to modify the chunk so that it references the right variable and possibly add , na.rm=T as an argument, but I've tried to demonstrate the syntax. You can put it into practice by also changing bridge age. Also, please use 'mean' instead of 'average' as the median, mean, and mode can be considered averages.
-
-:::
 
 ## Structural Condition  
 
-Structural conditions were evaluated using inspection ratings for bridge decks, superstructures, and substructures. These ratings range from 0 (failed condition) to 9 (excellent condition).
-
-Across the bridges in the sample, the average structural condition ratings are approximately 6, indicating that most bridges fall within the fair condition category. @fig-dist-deck-condition illustrates the distribution of deck condition ratings across bridges.
+Structural conditions were evaluated using inspection ratings for bridge decks, superstructures, and substructures. These ratings range from 0 (failed condition) to 9 (excellent condition). Since these ratings are recorded as discrete integers rather than continuous measurements, they are best treated as ordered categorical variables; @fig-dist-deck-condition therefore displays counts as a bar chart rather than a histogram.
 
 ```{r,echo=FALSE, warning=FALSE}
 #| fig-cap: "Distribution of Bridge Deck Condition Ratings in Douglas County, Nebraska."
 #| label: fig-dist-deck-condition
 
-ggplot(douglas_bridges, aes(x = DECK_COND_058)) +
-  geom_histogram(binwidth = 1) +
+cor_age_deck <- cor.test(
+  douglas_bridges$bridge_age,
+  douglas_bridges$DECK_COND_058,
+  method = "spearman"
+)
+
+rho_age_deck <- unname(cor_age_deck$estimate)
+p_age_deck <- cor_age_deck$p.value
+
+douglas_bridges %>%
+  mutate(DECK_COND_058 = factor(DECK_COND_058)) %>%
+  ggplot(aes(x = DECK_COND_058,
+             fill = DECK_COND_058 %in% as.character(0:4))) +
+  geom_bar() +
+  scale_fill_manual(values = c("FALSE" = "steelblue", "TRUE" = "darkorange"),
+                    labels = c("FALSE" = "Rating ≥ 5", "TRUE" = "Rating ≤ 4 (Higher Risk)"),
+                    name   = NULL) +
   labs(
-    title = "Distribution of Bridge Deck Condition Ratings",
     x = "Deck Condition Rating",
     y = "Number of Bridges"
-  )
+  ) +
+  theme_minimal()
 ```
-
-::: callout-note
-
-Unless ratings are provided as decimals (e.g. 5.43), I would turn these into a factor variable and use a bar chart instead of a histogram to be more technically correct.
-
-You need to use the chunk parameter `label` and `@fig-label` to reference the figure - don't manually number figures within the caption or the text. Let your document software handle keeping track of that for you, so that if you rearrange the analysis order you don't have to manually do anything to fix the text.
-
-I'll fix the first figure, but you are responsible for fixing the rest of them.
-
-:::
-
+The majority of bridges received deck condition ratings of 5, 6, or 7, consistent with the sample mean of `r round(deck_mean, 2)`. However, a meaningful minority of bridges fall at or below the rating-4 threshold. A Spearman correlation test confirmed a statistically significant negative relationship between bridge age and deck condition (ρ = `r round(rho_age_deck, 2)`, p = `r round(p_age_deck, 3)`), indicating that older bridges tend to exhibit lower deck condition ratings — though the effect is modest, suggesting factors beyond age alone (e.g., maintenance history, traffic loading, construction materials) also play a role.
 
 ## Traffic Exposure
 
-Traffic exposure was analyzed to evaluate the potential consequences of bridge failure. Bridges with higher traffic volumes represent greater transportation risk because a structural failure could disrupt a larger number of vehicles and commuters.
-
-The distribution of Average Daily Traffic across bridges is shown in Figure 2. While several bridges carry relatively low traffic volumes, others support substantially higher traffic levels, indicating their importance within the regional transportation network.
+Traffic exposure was analyzed to evaluate the potential *consequences* of bridge failure. A structurally compromised bridge that carries tens of thousands of vehicles per day poses a fundamentally different public risk than one serving a low-volume rural road.
 
 ```{r, echo=FALSE, warning=FALSE}
-#| fig-cap: "Figure 2. Distribution of Average Daily Traffic (ADT) for bridges in Douglas County."
+#| label: fig-adt-distribution
+#| fig-cap: "Figure 2. Distribution of Average Daily Traffic (ADT) for bridges in Douglas County, plotted on a logarithmic scale to accommodate the wide range of values. Most bridges carry between 1,000 and 100,000 vehicles per day."
+
+cor_deck_adt <- cor.test(
+  douglas_bridges$DECK_COND_058,
+  douglas_bridges$ADT_029,
+  method = "spearman"
+)
+
+rho_deck_adt <- unname(cor_deck_adt$estimate)
+p_deck_adt <- cor_deck_adt$p.value
 
 ggplot(douglas_bridges, aes(x = ADT_029)) +
-  geom_histogram(bins = 10) +
-  scale_x_log10() +
+  geom_histogram(bins = 10, fill = "steelblue", color = "white") +
+  scale_x_log10(labels = comma) +
   labs(
     x = "Average Daily Traffic (log scale)",
     y = "Number of Bridges"
   ) +
   theme_minimal()
+```
+As shown in @fig-adt-distribution, the distribution is right-skewed even on a log scale, with a small number of bridges supporting extremely high traffic volumes (exceeding 100,000 vehicles per day). These high-volume bridges represent critical nodes in Omaha's transportation network where a failure would have the most immediate regional impact.
 
+The correlation between deck condition and traffic volume was weak and not statistically significant (ρ = `r round(rho_deck_adt, 2)`, p = `r round(p_deck_adt, 3)`). This is an important finding: bridge condition does not appear to be better or worse on higher-traffic routes, which means high-traffic bridges are not receiving systematically stronger maintenance relative to their exposure.
+
+```{r, echo=FALSE}
+risk_summary <- douglas_bridges %>%
+  group_by(risk_group) %>%
+  summarise(
+    n = n(),
+    mean_adt = mean(ADT_029, na.rm = TRUE),
+    median_adt = median(ADT_029, na.rm = TRUE),
+    mean_age = mean(bridge_age, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+risk_summary
+mean_adt_high <- risk_summary %>%
+  filter(risk_group == "High Risk") %>%
+  pull(mean_adt)
+
+mean_adt_low <- risk_summary %>%
+  filter(risk_group == "Lower Risk") %>%
+  pull(mean_adt)
+
+n_high <- risk_summary %>%
+  filter(risk_group == "High Risk") %>%
+  pull(n)
+
+n_low <- risk_summary %>%
+  filter(risk_group == "Lower Risk") %>%
+  pull(n)
 ```
 
-Figure 2 shows the distribution of Average Daily Traffic (ADT) for bridges in Douglas County using a logarithmic scale. The use of a log scale allows bridges with very different traffic volumes to be visualized more clearly.
-
-The distribution indicates that most bridges carry moderate to high levels of traffic, with many bridges falling between 10,000 and 100,000 vehicles per day. A smaller number of bridges carry relatively low traffic volumes, while a few bridges support extremely high traffic levels exceeding 100,000 vehicles per day.
+Of the `r n_bridges` bridges in the sample, `r n_high` were classified as high risk and `r n_low` as lower risk. High-risk bridges had a mean ADT of `r comma(round(mean_adt_high, 0))`, compared with `r comma(round(mean_adt_low, 0))` for lower-risk bridges.
 
 ## Traffic by Bridge Condition
 

@@ -17,6 +17,7 @@ book:
     - draft-results.qmd
     - draft-intro-conclusions.qmd
     - draft-exec-summary.qmd
+    - session-info.qmd
 
 bibliography: references.bib
 
