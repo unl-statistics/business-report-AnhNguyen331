@@ -23,14 +23,20 @@ While informative, this study has several limitations. The analysis relies on pu
 
 Based on the findings, the following are recommended:
 
-- **Prioritize Maintenance for High-Risk Bridges**: Given that only 16 out of 390 bridges were classified as high risk, resources should be focused on this small but critical subset. These bridges are generally older and in poorer condition, making them the most likely candidates for structural failure.
+::: callout-important
+## Priority Action: Targeted Intervention for High-Risk Bridges
 
-- **Avoid Over-Reliance on Traffic Volume**: High-risk bridges were not necessarily those with the highest traffic volumes, indicating that usage alone is not a reliable indicator of risk. Maintenance strategies should therefore emphasize structural condition rather than traffic alone.
+Only 16 of 390 bridges were classified as high risk. Resources should be concentrated on this small subset immediately — these bridges are, on average, nearly 30 years older than lower-risk structures and show clear signs of advanced deterioration. Delaying intervention on this group represents the greatest near-term safety liability.
+:::
+
+::: callout-tip
+## Use a Two-Dimensional Risk Framework
+
+Traffic volume is best understood as a measure of **economic consequence**, not a causal factor in structural deterioration. A bridge in poor condition on a low-traffic road may be structurally unsafe but pose limited disruption if it fails; the same condition rating on a high-traffic corridor represents a much higher societal cost. Maintenance prioritization should therefore weigh structural condition (likelihood of failure) and traffic exposure (consequence of failure) separately, rather than treating either dimension alone as a proxy for overall risk.
+:::
 
 ::: callout-note
+## Improve Data Collection for Lower-Traffic Structures
 
-Or, it's ok for less-used bridges to be in worse condition, as they have less potential economic disruption? Traffic load is a way to measure economic disruption, not a causal factor.
-
-Consider using a callout or something to highlight action items.
-:::
+The weak relationship between traffic volume and condition ratings may partly reflect gaps in inspection data for smaller or lower-priority bridges. Standardizing inspection frequency and completeness across all bridge types would improve the reliability of future risk assessments.
 :::

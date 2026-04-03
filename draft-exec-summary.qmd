@@ -1,3 +1,21 @@
 ---
 title: "Draft: Executive Summary"
 ---
+
+# Overview
+
+This report examines the risk of bridge failure in Omaha, Nebraska over the next five years. Using 2025 federal bridge inspection data, 390 bridges in Douglas County were evaluated on two dimensions: how structurally sound they are, and how many people rely on them daily. The goal is to help decision-makers identify which bridges need attention most urgently, and why.
+
+# Methodology
+
+Bridges were classified as higher-risk if any structural condition rating of deck, superstructure, substructure fell at or below 4, consistent with FHWA conventions. Descriptive statistics and Spearman correlation tests were used to examine relationships between bridge age, structural condition, and Average Daily Traffic (ADT), where ADT served as a proxy for the consequence of failure. 
+
+# Key Findings
+
+Of the 390 bridges examined, 16 (4.1%) were flagged as higher-risk. These bridges are on average 30 years older than the rest (mean age 69.8 vs. 40.0 years), and older bridges were consistently found to be in worse structural condition. Most bridges across the county are in reasonable shape, with average inspection scores falling in the good range.
+
+One concern stands out: there is little relationship between how much traffic a bridge carries and how well it is maintained. Several structurally compromised bridges still carry tens of thousands of vehicles per day, representing the greatest risk to public safety and transportation.
+
+# Conclusion and Recommendations
+
+Bridge risk in Omaha is concentrated in a small number of aging structures. The 16 higher-risk bridges should be prioritized for immediate inspection and repair — especially those that also carry high traffic volumes. More broadly, Omaha's infrastructure management should move away from treating all bridges the same, and instead weigh both structural condition and public reliance together when deciding where to invest maintenance resources.
