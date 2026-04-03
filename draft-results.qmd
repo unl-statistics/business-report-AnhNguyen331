@@ -19,6 +19,13 @@ The purpose of the analysis is to estimate the potential risk of bridge collapse
 -   **National Bridge Inventory (NBI)**: A comprehensive dataset maintained by the @fhwaElement2025 that includes inspection results, structural condition ratings, bridge dimensions, construction year, and traffic statistics for bridges in the United States.^[The Nebraska NBI extract was downloaded from the FHWA bridge data portal at <https://www.fhwa.dot.gov/bridge/nbi/ascii.cfm>.]
 -   **Nebraska Department of Transportation Bridge Reports**: Provides summary information on bridge conditions across Nebraska, including counts of structurally deficient or functionally obsolete bridges and maintenance planning data [@BridgeNDOT]. ^[Reports are publicly available at <https://dot.nebraska.gov/media/4efjqkfa/bridge-condition-locally-owned.pdf>.]
 
+::: callout-note
+
+(real) Citations needed. Maybe turn each of these into a short paragraph. Discuss any flaws in the data set. You could even integrate the data features into the sources discussion, if you want?
+
+:::
+
+
 ## Data Features
 
 The datasets include several variables relevant to evaluating bridge safety and infrastructure risk:
