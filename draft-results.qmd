@@ -37,11 +37,11 @@ The datasets include several variables relevant to evaluating bridge safety and 
 
 ### Missing Data 
 
-Prior to filteriing to Douglas County, a missing data assessment was conducted on the key structural condition variables. Missingess was observed primarily in the three condition rating fields (`DECK_COND_58`, `SUPERSTRUCTURE_COND_059`, `SUBSTRUCTURE_COND_060`) and in `ADT_029`. Bridges with missing values in any of these variables were excluded from analysis using `drop_na()`, as these fields are essential for risk classification. It is worth noting that missingness in condition ratings may not be random, smaller or lower-priority structures are sometimes exempt from full NBI inspection requirements, which could mean the excluded bridges are systematically different from those retained. This is a limitation of the analysis.
+Prior to filtering to Douglas County, a missing data assessment was conducted on the key structural condition variables. Missingess was observed primarily in the three condition rating fields (`DECK_COND_58`, `SUPERSTRUCTURE_COND_059`, `SUBSTRUCTURE_COND_060`) and in `ADT_029`. Bridges with missing values in any of these variables were excluded from analysis using `drop_na()`, as these fields are essential for risk classification. It is worth noting that missingness in condition ratings may not be random, smaller or lower-priority structures are sometimes exempt from full NBI inspection requirements, which could mean the excluded bridges are systematically different from those retained. This is a limitation of the analysis.
 
 ## Data Collection and Preparation
 
-The Nebraska National Bridge Inventory dataset was downloaded in delimited text format and converted into a CSV file for analysis.The dataset was then imported into the R programming environment. Package versions and system information are documented in @sec-appendix-session
+The Nebraska National Bridge Inventory dataset was downloaded in delimited text format and converted into a CSV file for analysis. The dataset was then imported into the R programming environment. Package versions and system information are documented in @sec-appendix-session.
 
 To focus on the study area, bridges located in Douglas County were selected using the county code variable (`COUNTY_CODE_003 == 55`).
 Data cleaning steps were performed to prepare the dataset for statistical analysis.
@@ -78,7 +78,7 @@ The analysis was conducted in R. Package versions are recorded in @sec-appendix-
 
 -   **knitr:** Used to generate the final report and integrate code with written analysis [@KnitrYihuiXie].
 
-- **scales**
+-   **scales: ** Used for graphical scales map data to aesthetics [@wickhamScalesScaleFunctions2025].
 
 
 ## Analytical Approach
@@ -222,7 +222,7 @@ Traffic exposure was analyzed to evaluate the potential *consequences* of bridge
 
 ```{r, echo=FALSE, warning=FALSE}
 #| label: fig-adt-distribution
-#| fig-cap: "Figure 2. Distribution of Average Daily Traffic (ADT) for bridges in Douglas County, plotted on a logarithmic scale to accommodate the wide range of values. Most bridges carry between 1,000 and 100,000 vehicles per day."
+#| fig-cap: "Distribution of Average Daily Traffic (ADT) for bridges in Douglas County, plotted on a logarithmic scale to accommodate the wide range of values. Most bridges carry between 1,000 and 100,000 vehicles per day."
 
 cor_deck_adt <- cor.test(
   douglas_bridges$DECK_COND_058,
@@ -257,7 +257,6 @@ risk_summary <- douglas_bridges %>%
     .groups = "drop"
   )
 
-risk_summary
 mean_adt_high <- risk_summary %>%
   filter(risk_group == "High Risk") %>%
   pull(mean_adt)
@@ -265,6 +264,14 @@ mean_adt_high <- risk_summary %>%
 mean_adt_low <- risk_summary %>%
   filter(risk_group == "Lower Risk") %>%
   pull(mean_adt)
+
+mean_age_high <- risk_summary %>% 
+  filter(risk_group == "High Risk")  %>% 
+  pull(mean_age)
+
+mean_age_low  <- risk_summary %>% 
+  filter(risk_group == "Lower Risk") %>% 
+  pull(mean_age)
 
 n_high <- risk_summary %>%
   filter(risk_group == "High Risk") %>%
@@ -275,33 +282,33 @@ n_low <- risk_summary %>%
   pull(n)
 ```
 
-Of the `r n_bridges` bridges in the sample, `r n_high` were classified as high risk and `r n_low` as lower risk. High-risk bridges had a mean ADT of `r comma(round(mean_adt_high, 0))`, compared with `r comma(round(mean_adt_low, 0))` for lower-risk bridges.
+Of the `r n_bridges` bridges analyzed, `r n_high` (`r round(100 * n_high / n_bridges, 1)`%) were classified as higher-risk based on having at least one structural condition rating at or below 4. The remaining `r n_low` bridges were classified as lower risk.
+
+Higher-risk bridges were, on average, `r round(mean_age_high - mean_age_low, 1)` years older than lower-risk bridges (mean age `r round(mean_age_high, 1)` vs. `r round(mean_age_low, 1)` years), reinforcing the age–condition relationship observed above. Their mean daily traffic (`r comma(round(mean_adt_high, 0))` vehicles/day) was `r ifelse(mean_adt_high > mean_adt_low, "higher", "lower")` than that of lower-risk bridges (`r comma(round(mean_adt_low, 0))` vehicles/day), though the difference should be interpreted cautiously given the high variability in ADT across both groups.
 
 ## Traffic by Bridge Condition
 
+The combined risk picture — structural condition against traffic load — is the central question for prioritizing interventions. @fig-condition-traffic displays the distribution of ADT by deck condition rating.
+
 ```{r}
 #| echo: false
-#| fig-cap: "Figure 3. Relationship between bridge structural condition and traffic exposure in Douglas County, Nebraska."
+#| label: fig-condition-traffic
+#| fig-cap: "Relationship between bridge structural condition and traffic exposure in Douglas County, Nebraska."
 
-ggplot(douglas_bridges, aes(x = factor(DECK_COND_058), y = ADT_029, fill = factor(DECK_COND_058))) +
-  geom_boxplot(fill = "cyan") +
-  scale_y_log10() +
+ggplot(douglas_bridges,
+       aes(x = factor(DECK_COND_058), y = ADT_029,
+           fill = DECK_COND_058 <= 4)) +
+  geom_boxplot() +
+  scale_y_log10(labels = comma) +
+  scale_fill_manual(values = c("FALSE" = "steelblue", "TRUE" = "darkorange"),
+                    labels = c("FALSE" = "Rating ≥ 5", "TRUE"  = "Rating ≤ 4 (Higher Risk)"),
+                    name   = NULL) +
   labs(
     x = "Deck Condition Rating (0 = Failed, 9 = Excellent)",
-    y = "Average Daily Traffic (Log Scale)"
+    y = "Average Daily Traffic (log scale)"
   ) +
   theme_minimal()
 ```
 
-The box plot shows that bridges across multiple condition ratings carry a wide range of traffic volumes. While many bridges with moderate condition ratings (around 5–7) carry relatively moderate traffic levels, several bridges with similar condition ratings support substantially higher traffic volumes. The presence of high-traffic outliers indicates that som
+@fig-condition-traffic reveals a finding that carries direct policy implications: several bridges rated at 4 or below carry daily traffic volumes in the tens of thousands. These bridges sit in the upper-left danger zone — structurally compromised yet heavily used — and represent the clearest candidates for prioritized inspection and intervention. At the same time, the wide interquartile ranges within each rating category confirm that condition rating alone is not a reliable proxy for traffic exposure; both dimensions must be considered together when allocating limited maintenance resources.
 
-
-::: callout-note
-
-The text seems to have been cut off -- did you forget to push something?
-
-What you have here is closer to a methods section than a results section -- you need to spend more time interpreting your results. This also seems very formulaic -- as if it could have been produced by an AI. I'm not accusing you of that, but I do think you should put a bit more of your personality into your writing style, even in a business report.
-
-What are your actual findings? That's what goes in the results section.
-
-:::
