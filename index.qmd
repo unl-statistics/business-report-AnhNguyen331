@@ -1,45 +1,374 @@
-# Preface {.unnumbered}
+# Executive Summary
 
-You are a data scientist for a mid-sized business, in a small group of 3-4 data scientists. You've been tasked with creating a report evaluating a scenario for your business. Your colleagues will also be evaluating the same scenario, and your reports will be used in aggregate to determine a consensus (or lack thereof) on the company's action. The reports will also be used to inform downsizing that is rumored to be coming - you want to ensure your report is better than your peers so that you aren't as easy to cut.
+## Overview
 
-You may talk to your peers who are assigned the same scenario, but you do not want to collaborate too closely, lest you both become targets of the rumored layoffs.
+This report examines the risk of bridge failure in Omaha, Nebraska over the next five years. Using 2025 federal bridge inspection data, 390 bridges in Douglas County were evaluated on two dimensions: how structurally sound they are, and how many people rely on them daily. The goal is to help decision-makers identify which bridges need attention most urgently, and why.
 
-------------------------------------------------------------------------
+## Methodology
 
-I've scaffolded this report for you to make this process easier - as we talk about different sections of a report in class and read about how to create similar sections, you will practice by writing the equivalent section of your report.
+Bridges were classified as higher-risk if any structural condition rating of deck, superstructure, substructure fell at or below 4, consistent with FHWA conventions. Descriptive statistics and Spearman correlation tests were used to examine relationships between bridge age, structural condition, and Average Daily Traffic (ADT), where ADT served as a proxy for the consequence of failure. 
 
-The basic steps for this task are as follows:
+## Key Findings
 
--   Identify the research question from the business question
+Of the 390 bridges examined, 16 (4.1%) were flagged as higher-risk. These bridges are on average 30 years older than the rest (mean age 69.8 vs. 40.0 years), and older bridges were consistently found to be in worse structural condition. Most bridges across the county are in reasonable shape, with average inspection scores falling in the good range.
 
--   Identify data set(s) which are (1) publicly available (you don't have a budget to pay for private data) and (2) relevant to your task
+One concern stands out: there is little relationship between how much traffic a bridge carries and how well it is maintained. Several structurally compromised bridges still carry tens of thousands of vehicles per day, representing the greatest risk to public safety and transportation.
 
-    -   (HW Week 6) Document your data sets in `draft-data-doc.qmd`
+## Conclusion and Recommendations
 
--   Conduct a statistical analysis to support your answer to your research and business questions
+Bridge risk in Omaha is concentrated in a small number of aging structures. The 16 higher-risk bridges should be prioritized for immediate inspection and repair — especially those that also carry high traffic volumes. More broadly, Omaha's infrastructure management should move away from treating all bridges the same, and instead weigh both structural condition and public reliance together when deciding where to invest maintenance resources.
 
-    -   Write a methods section for your business report corresponding to your statistical analysis
+# Introduction
 
-    -   (HW Week 9) Draft of results section of business report with relevant graphics/visual aids in `draft-results.qmd`
+In 2025, a report from the @artbaBridgeReport2025 estimated that more than 40,000 bridges in the United States are structurally deficient, highlighting widespread concerns about aging infrastructure. Data from the @fhwaElement2025 further show that a substantial share of bridges remain in fair or poor condition, requiring ongoing monitoring and maintenance. These statistics underscore the real risks associated with infrastructure deterioration, where failures can lead not only to economic disruption but also to severe safety consequences for the public.
 
--   Write your report
+While national reports emphasize the scale of the problem, they often rely on condition ratings alone, which do not fully capture the actual risk posed by individual bridges. In practice, bridges with similar structural conditions can present very different levels of danger depending on how heavily they are used. This creates a critical gap in infrastructure assessment, where decision-makers lack a clear method for prioritizing repairs based on both likelihood of failure and potential impact.
 
-    -   (HW Week 10) Draft of Intro/Conclusion sections in `draft-intro-conclusions.qmd`
+This report investigates bridge risk in Omaha (Douglas County) using a risk-based framework that evaluates safety as a function of both failure probability and consequence. Drawing on @fhwaElement2025 element data, the analysis incorporates structural condition indicators (deck, superstructure, and substructure ratings, along with bridge age) and consequence measures such as average daily traffic. By examining how these factors interact, the study identifies bridges where deterioration coincides with high usage, representing the greatest overall risk.
 
-    -   (HW Week 11) Draft of Executive summary section in `draft-exec-summary.qmd`
+Findings indicate that while most bridges are not at immediate risk of collapse, those with moderate structural degradation and high traffic exposure account for the highest-risk group. These results suggest that infrastructure management should shift from condition-based assessments toward risk-informed prioritization, enabling more effective allocation of maintenance resources and improved public safety outcomes.
 
--   Revise your report
+# Data & Method
 
-    -   (HW Week 12 -- not turned in) Revise your report
+## Business Question
 
-    -   (HW Week 13) - Rough draft of report due. Create one or more qmd files for your report (you can overwrite or delete intro.qmd and summary.qmd), include the names of each file (in order) in `_quarto.yml`. You should use references (edit references.bib and use pandoc citations). Make sure your report compiles and looks reasonable in both html and pdf.
+What is the risk of a bridge collapse in Omaha over the next five years, and what interventions should be implemented?
 
-    -   Develop a presentation to go along with your report (Week 13). Create slides for your report using quarto.
+## Research Question
 
--   Peer revise reports
+Based on publicly available inspection and transportation data, what is the estimated probability of structural bridge failure in Omaha, and which bridges present the greatest risk when considering both likelihood and consequence?
 
-    -   Peer revise reports
+## Data & Methods
 
-    -   (HW Week 14) - Make edits to your report from comments received from peer review
+The analysis uses publicly available bridge inspection and transportation datasets from the @fhwaElement2025 and summary reports from the @BridgeNDOT.
+These datasets contain information on bridge conditions, construction characteristics, and traffic volumes for bridges across the United States.
+The Nebraska bridge inventory dataset for 2025 was used to evaluate bridge conditions in **Douglas County**, which includes the city of **Omaha**.
+The purpose of the analysis is to estimate the potential risk of bridge collapse by examining structural condition ratings and transportation usage.
 
--   Final report & presentation due
+### Data Sources
+
+-   **National Bridge Inventory (NBI)**: A comprehensive dataset maintained by the @fhwaElement2025 that includes inspection results, structural condition ratings, bridge dimensions, construction year, and traffic statistics for bridges in the United States.^[The Nebraska NBI extract was downloaded from the FHWA bridge data portal at <https://www.fhwa.dot.gov/bridge/nbi/ascii.cfm>.]
+-   **Nebraska Department of Transportation Bridge Reports**: Provides summary information on bridge conditions across Nebraska, including counts of structurally deficient or functionally obsolete bridges and maintenance planning data [@BridgeNDOT]. ^[Reports are publicly available at <https://dot.nebraska.gov/media/4efjqkfa/bridge-condition-locally-owned.pdf>.]
+
+### Data Features
+
+The datasets include several variables relevant to evaluating bridge safety and infrastructure risk:
+
+-   **Structural Condition Ratings**: Includes inspection scores for deck condition `DECK_COND_058`, superstructure condition `SUPERSTRUCTURE_COND_059`, and substructure condition `SUBSTRUCTURE_COND_060`.
+    These ratings range from 0 to 9, where higher values represent better structural condition.
+
+-   **Traffic Volume**: Average Daily Traffic `ADT_029` estimates the number of vehicles crossing each bridge per day, indicating the level of transportation demand.
+
+-   **Bridge Age**: Construction year `YEAR_BUILT_027` allows calculation of bridge age, which may influence structural deterioration over time.
+
+-   **Location Information**: Geographic identifiers such as state code and county code allow bridges in Douglas County to be isolated for analysis.
+
+-   **Bridge Dimensions and Characteristics**: Additional variables such as bridge length, roadway width, and number of spans describe the structural characteristics of each bridge
+
+
+#### Missing Data 
+
+Prior to filtering to Douglas County, a missing data assessment was conducted on the key structural condition variables. Missingess was observed primarily in the three condition rating fields (`DECK_COND_58`, `SUPERSTRUCTURE_COND_059`, `SUBSTRUCTURE_COND_060`) and in `ADT_029`. Bridges with missing values in any of these variables were excluded from analysis using `drop_na()`, as these fields are essential for risk classification. It is worth noting that missingness in condition ratings may not be random, smaller or lower-priority structures are sometimes exempt from full NBI inspection requirements, which could mean the excluded bridges are systematically different from those retained. This is a limitation of the analysis.
+
+### Data Collection and Preparation
+
+The Nebraska National Bridge Inventory dataset was downloaded in delimited text format and converted into a CSV file for analysis. The dataset was then imported into the R programming environment. Package versions and system information are documented in @sec-appendix-session.
+
+To focus on the study area, bridges located in Douglas County were selected using the county code variable (`COUNTY_CODE_003 == 55`).
+Data cleaning steps were performed to prepare the dataset for statistical analysis.
+Several inspection variables were initially stored as character values and were converted to numeric format in order to calculate summary statistics.
+Missing or non-numeric values were treated as missing observations and excluded.
+
+Additional variables were created to support analysis.
+Bridge age was calculated by subtracting the construction year from the most current year (2025).
+This variable helps identify older infrastructure that may require increased maintenance or monitoring.
+
+#### Data Classification
+
+To evaluate structural risk, bridges were categorized according to their inspection ratings.
+
+-   **Higher-risk bridges**: Bridges with structural condition ratings of 4 or lower in the deck, superstructure, or substructure categories, indicating poor structural condition or advanced deterioration.
+
+-   **Moderate-condition bridges**: Bridges with ratings between 5 and 6, indicating fair structural condition.
+
+-   **Good-condition bridges**: Bridges with ratings of 7 or higher, representing satisfactory or good structural performance.
+
+This classification aligns with FHWA conventions for identifying structurally deficient bridges and allows the analysis to prioritize structure most in need of intervention.
+
+#### R packages and Software
+
+The analysis was conducted in R. Package versions are recorded in @sec-appendix-session. Key packages used include:
+
+-   **readr:** Used to import the bridge inventory dataset into R [@wickhamReadrReadRectangular2026].
+
+-   **tidyverse:** Used for data manipulation, filtering, and summarization [@wickhamTidyverseEasilyInstall2023].
+
+-   **dplyr:** Used to calculate descriptive statistics and identify high-risk bridges [@wickhamDplyrGrammarData2026].
+
+-   **ggplot2:** Used to create visualizations of bridge condition ratings, traffic levels, and bridge age distributions [@wickhamGgplot2CreateElegant2026].
+
+-   **knitr:** Used to generate the final report and integrate code with written analysis [@KnitrYihuiXie].
+
+-   **scales: ** Used for graphical scales map data to aesthetics [@wickhamScalesScaleFunctions2025].
+
+
+### Analytical Approach
+
+The analysis proceeded in three stages. First, descriptive statistics were calculated to characterize the full sample of Douglas County bridges on key variables: structural condition ratings, bridge age, and traffic volume. Second, a condition rating analysis identified bridges with ratings at or below 4 in any structural component, flagging them as higher-risk. Third, a combined risk assessment cross-tabulated structural condition against traffic exposure (ADT), since bridges that are both structurally compromised and heavily used represent the greatest public safety risk — high likelihood of failure combined with high consequence. Spearman correlation tests were used to assess the monotonic relationships between age, condition, and traffic, given the ordinal nature of the condition rating variables.
+
+# Result
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(readr)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(knitr)
+library(scales)
+
+```
+
+```{r,echo=FALSE, warning=FALSE}
+inventory <- read.csv("data/national_bridge_inventory_ne.csv")
+
+douglas_bridges <- inventory %>%
+  select(
+    COUNTY_CODE_003,
+    YEAR_BUILT_027,
+    YEAR_RECONSTRUCTED_106,
+    ADT_029,
+    FUNCTIONAL_CLASS_026,
+    DECK_COND_058,
+    SUPERSTRUCTURE_COND_059,
+    SUBSTRUCTURE_COND_060,
+    LOWEST_RATING,
+    BRIDGE_CONDITION,
+    STRUCTURE_LEN_MT_049,
+    DECK_AREA
+  ) %>%
+  filter(COUNTY_CODE_003 == 55) %>%
+  mutate(
+    YEAR_BUILT_027 = as.numeric(YEAR_BUILT_027),
+    ADT_029 = as.numeric(ADT_029),
+    DECK_COND_058 = as.numeric(DECK_COND_058),
+    SUPERSTRUCTURE_COND_059 = as.numeric(SUPERSTRUCTURE_COND_059),
+    SUBSTRUCTURE_COND_060 = as.numeric(SUBSTRUCTURE_COND_060),
+    bridge_age = 2026 - YEAR_BUILT_027
+  ) %>%
+  drop_na(ADT_029, bridge_age, DECK_COND_058, SUPERSTRUCTURE_COND_059, SUBSTRUCTURE_COND_060)
+
+douglas_bridges <- douglas_bridges %>%
+  mutate(
+    risk_group = ifelse(
+      DECK_COND_058 <= 4 |
+      SUPERSTRUCTURE_COND_059 <= 4 |
+      SUBSTRUCTURE_COND_060 <= 4,
+      "High Risk",
+      "Lower Risk"
+    )
+  )
+```
+
+
+```{r, echo=FALSE}
+n_bridges <- nrow(douglas_bridges)
+
+adt_min <- min(douglas_bridges$ADT_029, na.rm = TRUE)
+adt_max <- max(douglas_bridges$ADT_029, na.rm = TRUE)
+adt_median <- median(douglas_bridges$ADT_029, na.rm = TRUE)
+adt_mean <- mean(douglas_bridges$ADT_029, na.rm = TRUE)
+
+age_min <- min(douglas_bridges$bridge_age, na.rm = TRUE)
+age_max <- max(douglas_bridges$bridge_age, na.rm = TRUE)
+age_median <- median(douglas_bridges$bridge_age, na.rm = TRUE)
+age_mean <- mean(douglas_bridges$bridge_age, na.rm = TRUE)
+
+deck_mean <- mean(douglas_bridges$DECK_COND_058, na.rm = TRUE)
+super_mean <- mean(douglas_bridges$SUPERSTRUCTURE_COND_059, na.rm = TRUE)
+sub_mean <- mean(douglas_bridges$SUBSTRUCTURE_COND_060, na.rm = TRUE)
+
+```
+
+## Study Sample Characteristics
+
+Bridge inspection data from the Federal Highway Administration were analyzed for bridges located in Douglas County, which includes the city of Omaha. A total of `r n_bridges` bridges were included in the analysis after excluding records with missing values in key structural or traffic variables.
+
+```{r, echo=FALSE, tbl-summary-stat}
+#| tbl-cap: "Descriptive statistics for traffic volume and bridge age among analyzed Douglas County bridges"
+
+summary_table <- tibble(
+  Variable = c("Daily Traffic Mean", "Bridge Age (years)"),
+  Min = c(adt_min, age_min),
+  Median = c(comma(adt_median, age_median)),
+  Mean = c(comma(adt_mean, age_mean)),
+  Max = c(comma(adt_max, age_max))
+)
+kable(summary_table, booktabs = TRUE, digits = 1,
+      format.args = list(big.mark = ","))
+
+```
+
+As shown in @tbl-summary-stat, Average Daily Traffic ranged from `r comma(adt_min)` to `r comma(adt_max)` vehicles per day, with a median of `r comma(round(adt_median, 0))` and a mean of `r comma(round(adt_mean, 0))`. This wide spread reflects the mix of major arterial crossings and minor local bridges in Douglas County
+
+Bridge age ranged from `r age_min` to `r age_max` years, with a median of `r round(age_median, 1)` years and a mean of `r round(age_mean, 1)` years. The relatively high mean age suggests that a substantial portion of the county's bridge inventory predates modern design standards and may face greater maintenance demands.
+
+The mean deck, superstructure, and substructure ratings were `r round(deck_mean, 2)`, `r round(super_mean, 2)`, and `r round(sub_mean, 2)`, respectively, all falling within the "fair" range (5-6) on the 0-9 NBI scale.
+
+
+## Structural Condition  
+
+Structural conditions were evaluated using inspection ratings for bridge decks, superstructures, and substructures. These ratings range from 0 (failed condition) to 9 (excellent condition). Since these ratings are recorded as discrete integers rather than continuous measurements, they are best treated as ordered categorical variables; @fig-dist-deck-condition therefore displays counts as a bar chart rather than a histogram.
+
+```{r,echo=FALSE, warning=FALSE}
+#| fig-cap: "Distribution of Bridge Deck Condition Ratings in Douglas County, Nebraska."
+#| label: fig-dist-deck-condition
+
+cor_age_deck <- cor.test(
+  douglas_bridges$bridge_age,
+  douglas_bridges$DECK_COND_058,
+  method = "spearman"
+)
+
+rho_age_deck <- unname(cor_age_deck$estimate)
+p_age_deck <- cor_age_deck$p.value
+
+douglas_bridges %>%
+  mutate(DECK_COND_058 = factor(DECK_COND_058)) %>%
+  ggplot(aes(x = DECK_COND_058,
+             fill = DECK_COND_058 %in% as.character(0:4))) +
+  geom_bar() +
+  scale_fill_manual(values = c("FALSE" = "steelblue", "TRUE" = "darkorange"),
+                    labels = c("FALSE" = "Rating ≥ 5", "TRUE" = "Rating ≤ 4 (Higher Risk)"),
+                    name   = NULL) +
+  labs(
+    x = "Deck Condition Rating",
+    y = "Number of Bridges"
+  ) +
+  theme_minimal()
+```
+The majority of bridges received deck condition ratings of 5, 6, or 7, consistent with the sample mean of `r round(deck_mean, 2)`. However, a meaningful minority of bridges fall at or below the rating-4 threshold. A Spearman correlation test confirmed a statistically significant negative relationship between bridge age and deck condition ($\rho$ = `r round(rho_age_deck, 2)`, p = `r round(p_age_deck, 3)`), indicating that older bridges tend to exhibit lower deck condition ratings — though the effect is modest, suggesting factors beyond age alone (e.g., maintenance history, traffic loading, construction materials) also play a role.
+
+## Traffic Exposure
+
+Traffic exposure was analyzed to evaluate the potential *consequences* of bridge failure. A structurally compromised bridge that carries tens of thousands of vehicles per day poses a fundamentally different public risk than one serving a low-volume rural road.
+
+```{r, echo=FALSE, warning=FALSE, fig.height=4, fig.width=6}
+#| label: fig-adt-distribution
+#| fig-cap: "Distribution of Average Daily Traffic (ADT) for bridges in Douglas County, plotted on a logarithmic scale to accommodate the wide range of values. Most bridges carry between 1,000 and 100,000 vehicles per day."
+
+cor_deck_adt <- cor.test(
+  douglas_bridges$DECK_COND_058,
+  douglas_bridges$ADT_029,
+  method = "spearman"
+)
+
+rho_deck_adt <- unname(cor_deck_adt$estimate)
+p_deck_adt <- cor_deck_adt$p.value
+
+ggplot(douglas_bridges, aes(x = ADT_029)) +
+  geom_histogram(bins = 10, fill = "steelblue", color = "white") +
+  scale_x_log10(labels = comma) +
+  labs(
+    x = "Average Daily Traffic (log scale)",
+    y = "Number of Bridges"
+  ) +
+  theme_minimal()
+```
+
+As shown in @fig-adt-distribution, the distribution is right-skewed even on a log scale, with a small number of bridges supporting extremely high traffic volumes (exceeding 100,000 vehicles per day). These high-volume bridges represent critical nodes in Omaha's transportation network where a failure would have the most immediate regional impact.
+
+The correlation between deck condition and traffic volume was weak and not statistically significant ($\rho$ = `r round(rho_deck_adt, 2)`, p = `r round(p_deck_adt, 3)`). This is an important finding: bridge condition does not appear to be better or worse on higher-traffic routes, which means high-traffic bridges are not receiving systematically stronger maintenance relative to their exposure.
+
+```{r, echo=FALSE}
+risk_summary <- douglas_bridges %>%
+  group_by(risk_group) %>%
+  summarise(
+    n = n(),
+    mean_adt = mean(ADT_029, na.rm = TRUE),
+    median_adt = median(ADT_029, na.rm = TRUE),
+    mean_age = mean(bridge_age, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+mean_adt_high <- risk_summary %>%
+  filter(risk_group == "High Risk") %>%
+  pull(mean_adt)
+
+mean_adt_low <- risk_summary %>%
+  filter(risk_group == "Lower Risk") %>%
+  pull(mean_adt)
+
+mean_age_high <- risk_summary %>% 
+  filter(risk_group == "High Risk")  %>% 
+  pull(mean_age)
+
+mean_age_low  <- risk_summary %>% 
+  filter(risk_group == "Lower Risk") %>% 
+  pull(mean_age)
+
+n_high <- risk_summary %>%
+  filter(risk_group == "High Risk") %>%
+  pull(n)
+
+n_low <- risk_summary %>%
+  filter(risk_group == "Lower Risk") %>%
+  pull(n)
+```
+
+Of the `r n_bridges` bridges analyzed, `r n_high` (`r round(100 * n_high / n_bridges, 1)`%) were classified as higher-risk based on having at least one structural condition rating at or below 4. The remaining `r n_low` bridges were classified as lower risk.
+
+Higher-risk bridges were, on average, `r round(mean_age_high - mean_age_low, 1)` years older than lower-risk bridges (mean age `r round(mean_age_high, 1)` vs. `r round(mean_age_low, 1)` years), reinforcing the age–condition relationship observed above. Their mean daily traffic (`r comma(round(mean_adt_high, 0))` vehicles/day) was `r ifelse(mean_adt_high > mean_adt_low, "higher", "lower")` than that of lower-risk bridges (`r comma(round(mean_adt_low, 0))` vehicles/day), though the difference should be interpreted cautiously given the high variability in ADT across both groups.
+
+## Traffic by Bridge Condition
+
+The combined risk picture — structural condition against traffic load — is the central question for prioritizing interventions. @fig-condition-traffic displays the distribution of ADT by deck condition rating.
+
+```{r}
+#| echo: false
+#| label: fig-condition-traffic
+#| fig-cap: "Relationship between bridge structural condition and traffic exposure in Douglas County, Nebraska."
+
+ggplot(douglas_bridges,
+       aes(x = factor(DECK_COND_058), y = ADT_029,
+           fill = DECK_COND_058 <= 4)) +
+  geom_boxplot() +
+  scale_y_log10(labels = comma) +
+  scale_fill_manual(values = c("FALSE" = "steelblue", "TRUE" = "darkorange"),
+                    labels = c("FALSE" = "Rating ≥ 5", "TRUE"  = "Rating ≤ 4 (Higher Risk)"),
+                    name   = NULL) +
+  labs(
+    x = "Deck Condition Rating (0 = Failed, 9 = Excellent)",
+    y = "Average Daily Traffic (log scale)"
+  ) +
+  theme_minimal()
+```
+
+@fig-condition-traffic reveals a finding that carries direct policy implications: several bridges rated at 4 or below carry daily traffic volumes in the tens of thousands. These bridges sit in the upper-left danger zone — structurally compromised yet heavily used — and represent the clearest candidates for prioritized inspection and intervention. At the same time, the wide interquartile ranges within each rating category confirm that condition rating alone is not a reliable proxy for traffic exposure; both dimensions must be considered together when allocating limited maintenance resources.
+
+
+# Conclusion
+
+This analysis examined bridge risk in Omaha using a framework that combines structural condition and traffic exposure. Of the 390 bridges analyzed, only 16 were classified as high risk, indicating that overall risk is concentrated in a small subset of structures. High-risk bridges were substantially older (mean age 69.8 years vs. 40.0 years), and age was moderately associated with poorer condition ($\rho$ = -0.40, p < 0.001). However, traffic volume showed only a weak relationship with condition ($\rho$ = 0.17, p = 0.001), and high-risk bridges carried lower average traffic than lower-risk bridges. These findings suggest that structural deterioration and usage do not always align, reinforcing the need to evaluate both likelihood and consequence when assessing bridge risk.
+
+While informative, this study has several limitations. The analysis relies on publicly available data from the @fhwaElement2025, which may include inconsistencies or missing values. In addition, proxy variables such as condition ratings and traffic volume do not fully capture true failure probability or real-world impact. The focus on a single region limits generalizability, and the absence of observed failure events reduces statistical power and limits predictive modeling.
+
+## Recommendation
+
+Based on the findings, the following are recommended:
+
+::: callout-important
+## Priority Action: Targeted Intervention for High-Risk Bridges
+
+Only 16 of 390 bridges were classified as high risk. Resources should be concentrated on this small subset immediately — these bridges are, on average, nearly 30 years older than lower-risk structures and show clear signs of advanced deterioration. Delaying intervention on this group represents the greatest near-term safety liability.
+:::
+
+::: callout-tip
+## Use a Two-Dimensional Risk Framework
+
+Traffic volume is best understood as a measure of **economic consequence**, not a causal factor in structural deterioration. A bridge in poor condition on a low-traffic road may be structurally unsafe but pose limited disruption if it fails; the same condition rating on a high-traffic corridor represents a much higher societal cost. Maintenance prioritization should therefore weigh structural condition (likelihood of failure) and traffic exposure (consequence of failure) separately, rather than treating either dimension alone as a proxy for overall risk.
+:::
+
+::: callout-note
+## Improve Data Collection for Lower-Traffic Structures
+
+The weak relationship between traffic volume and condition ratings may partly reflect gaps in inspection data for smaller or lower-priority bridges. Standardizing inspection frequency and completeness across all bridge types would improve the reliability of future risk assessments.
+:::

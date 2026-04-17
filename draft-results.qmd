@@ -77,13 +77,12 @@ super_mean <- mean(douglas_bridges$SUPERSTRUCTURE_COND_059, na.rm = TRUE)
 sub_mean <- mean(douglas_bridges$SUBSTRUCTURE_COND_060, na.rm = TRUE)
 
 ```
-# Results
 
 ## Study Sample Characteristics
 
 Bridge inspection data from the Federal Highway Administration were analyzed for bridges located in Douglas County, which includes the city of Omaha. A total of `r n_bridges` bridges were included in the analysis after excluding records with missing values in key structural or traffic variables.
 
-```{r, echo=FALSE, tbl-summary-stat}
+```{r, echo=FALSE, tbl-summary-stat-dr}
 #| tbl-cap: "Descriptive statistics for traffic volume and bridge age among analyzed Douglas County bridges"
 
 summary_table <- tibble(
@@ -98,7 +97,7 @@ kable(summary_table, booktabs = TRUE, digits = 1,
 
 ```
 
-As shown in @tbl-summary-stat, Average Daily Traffic ranged from `r comma(adt_min)` to `r comma(adt_max)` vehicles per day, with a median of `r comma(round(adt_median, 0))` and a mean of `r comma(round(adt_mean, 0))`. This wide spread reflects the mix of major arterial crossings and minor local bridges in Douglas County
+As shown in @tbl-summary-stat-dr, Average Daily Traffic ranged from `r comma(adt_min)` to `r comma(adt_max)` vehicles per day, with a median of `r comma(round(adt_median, 0))` and a mean of `r comma(round(adt_mean, 0))`. This wide spread reflects the mix of major arterial crossings and minor local bridges in Douglas County
 
 Bridge age ranged from `r age_min` to `r age_max` years, with a median of `r round(age_median, 1)` years and a mean of `r round(age_mean, 1)` years. The relatively high mean age suggests that a substantial portion of the county's bridge inventory predates modern design standards and may face greater maintenance demands.
 
@@ -107,11 +106,11 @@ The mean deck, superstructure, and substructure ratings were `r round(deck_mean,
 
 ## Structural Condition  
 
-Structural conditions were evaluated using inspection ratings for bridge decks, superstructures, and substructures. These ratings range from 0 (failed condition) to 9 (excellent condition). Since these ratings are recorded as discrete integers rather than continuous measurements, they are best treated as ordered categorical variables; @fig-dist-deck-condition therefore displays counts as a bar chart rather than a histogram.
+Structural conditions were evaluated using inspection ratings for bridge decks, superstructures, and substructures. These ratings range from 0 (failed condition) to 9 (excellent condition). Since these ratings are recorded as discrete integers rather than continuous measurements, they are best treated as ordered categorical variables; @fig-dist-deck-condition-dr therefore displays counts as a bar chart rather than a histogram.
 
 ```{r,echo=FALSE, warning=FALSE}
 #| fig-cap: "Distribution of Bridge Deck Condition Ratings in Douglas County, Nebraska."
-#| label: fig-dist-deck-condition
+#| label: fig-dist-deck-condition-dr
 
 cor_age_deck <- cor.test(
   douglas_bridges$bridge_age,
@@ -143,7 +142,7 @@ The majority of bridges received deck condition ratings of 5, 6, or 7, consisten
 Traffic exposure was analyzed to evaluate the potential *consequences* of bridge failure. A structurally compromised bridge that carries tens of thousands of vehicles per day poses a fundamentally different public risk than one serving a low-volume rural road.
 
 ```{r, echo=FALSE, warning=FALSE}
-#| label: fig-adt-distribution
+#| label: fig-adt-distribution-dr
 #| fig-cap: "Distribution of Average Daily Traffic (ADT) for bridges in Douglas County, plotted on a logarithmic scale to accommodate the wide range of values. Most bridges carry between 1,000 and 100,000 vehicles per day."
 
 cor_deck_adt <- cor.test(
@@ -164,9 +163,9 @@ ggplot(douglas_bridges, aes(x = ADT_029)) +
   ) +
   theme_minimal()
 ```
-As shown in @fig-adt-distribution, the distribution is right-skewed even on a log scale, with a small number of bridges supporting extremely high traffic volumes (exceeding 100,000 vehicles per day). These high-volume bridges represent critical nodes in Omaha's transportation network where a failure would have the most immediate regional impact.
+As shown in @fig-adt-distribution-dr, the distribution is right-skewed even on a log scale, with a small number of bridges supporting extremely high traffic volumes (exceeding 100,000 vehicles per day). These high-volume bridges represent critical nodes in Omaha's transportation network where a failure would have the most immediate regional impact.
 
-The correlation between deck condition and traffic volume was weak and not statistically significant (ρ = `r round(rho_deck_adt, 2)`, p = `r round(p_deck_adt, 3)`). This is an important finding: bridge condition does not appear to be better or worse on higher-traffic routes, which means high-traffic bridges are not receiving systematically stronger maintenance relative to their exposure.
+The correlation between deck condition and traffic volume was weak and not statistically significant ($\rho$ = `r round(rho_deck_adt, 2)`, p = `r round(p_deck_adt, 3)`). This is an important finding: bridge condition does not appear to be better or worse on higher-traffic routes, which means high-traffic bridges are not receiving systematically stronger maintenance relative to their exposure.
 
 ```{r, echo=FALSE}
 risk_summary <- douglas_bridges %>%
@@ -210,11 +209,11 @@ Higher-risk bridges were, on average, `r round(mean_age_high - mean_age_low, 1)`
 
 ## Traffic by Bridge Condition
 
-The combined risk picture — structural condition against traffic load — is the central question for prioritizing interventions. @fig-condition-traffic displays the distribution of ADT by deck condition rating.
+The combined risk picture — structural condition against traffic load — is the central question for prioritizing interventions. @fig-dr-condition-traffic displays the distribution of ADT by deck condition rating.
 
 ```{r}
 #| echo: false
-#| label: fig-condition-traffic
+#| label: fig-dr-condition-traffic
 #| fig-cap: "Relationship between bridge structural condition and traffic exposure in Douglas County, Nebraska."
 
 ggplot(douglas_bridges,
@@ -232,5 +231,5 @@ ggplot(douglas_bridges,
   theme_minimal()
 ```
 
-@fig-condition-traffic reveals a finding that carries direct policy implications: several bridges rated at 4 or below carry daily traffic volumes in the tens of thousands. These bridges sit in the upper-left danger zone — structurally compromised yet heavily used — and represent the clearest candidates for prioritized inspection and intervention. At the same time, the wide interquartile ranges within each rating category confirm that condition rating alone is not a reliable proxy for traffic exposure; both dimensions must be considered together when allocating limited maintenance resources.
+@fig-dr-condition-traffic reveals a finding that carries direct policy implications: several bridges rated at 4 or below carry daily traffic volumes in the tens of thousands. These bridges sit in the upper-left danger zone — structurally compromised yet heavily used — and represent the clearest candidates for prioritized inspection and intervention. At the same time, the wide interquartile ranges within each rating category confirm that condition rating alone is not a reliable proxy for traffic exposure; both dimensions must be considered together when allocating limited maintenance resources.
 

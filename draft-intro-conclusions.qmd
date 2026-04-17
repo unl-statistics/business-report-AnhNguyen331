@@ -3,7 +3,7 @@ title: "Draft: Intro/Conclusions"
 bibliography: references.bib
 ---
 
-# Introduction
+## Introduction
 
 In 2025, a report from the @artbaBridgeReport2025 estimated that more than 40,000 bridges in the United States are structurally deficient, highlighting widespread concerns about aging infrastructure. Data from the @fhwaElement2025 further show that a substantial share of bridges remain in fair or poor condition, requiring ongoing monitoring and maintenance. These statistics underscore the real risks associated with infrastructure deterioration, where failures can lead not only to economic disruption but also to severe safety consequences for the public.
 
@@ -13,7 +13,7 @@ This report investigates bridge risk in Omaha (Douglas County) using a risk-base
 
 Findings indicate that while most bridges are not at immediate risk of collapse, those with moderate structural degradation and high traffic exposure account for the highest-risk group. These results suggest that infrastructure management should shift from condition-based assessments toward risk-informed prioritization, enabling more effective allocation of maintenance resources and improved public safety outcomes.
 
-# Conclusion
+## Conclusion
 
 This analysis examined bridge risk in Omaha using a framework that combines structural condition and traffic exposure. Of the 390 bridges analyzed, only 16 were classified as high risk, indicating that overall risk is concentrated in a small subset of structures. High-risk bridges were substantially older (mean age 69.8 years vs. 40.0 years), and age was moderately associated with poorer condition (ρ = -0.40, p < 0.001). However, traffic volume showed only a weak relationship with condition (ρ = 0.17, p = 0.001), and high-risk bridges carried lower average traffic than lower-risk bridges. These findings suggest that structural deterioration and usage do not always align, reinforcing the need to evaluate both likelihood and consequence when assessing bridge risk.
 
