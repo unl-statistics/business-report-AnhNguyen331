@@ -9,6 +9,10 @@ book:
     left: "Copyright 2026, Anh Nguyen"
   chapters:
     - index.qmd
+    - intro.qmd
+    - data-doc.qmd
+    - result.qmd
+    - conclusion.qmd
     - references.qmd
     - session-info.qmd
   appendices:

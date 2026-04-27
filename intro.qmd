@@ -1,4 +1,14 @@
-# Introduction
+---
+title: "Introduction"
+format: html
+---
 
-This is a book created from markdown and executable code.
+
+In 2025, a report from the @artbaBridgeReport2025 estimated that more than 40,000 bridges in the United States are structurally deficient, highlighting widespread concerns about aging infrastructure. Data from the @fhwaElement2025 further show that a substantial share of bridges remain in fair or poor condition, requiring ongoing monitoring and maintenance. These statistics underscore the real risks associated with infrastructure deterioration, where failures can lead not only to economic disruption but also to severe safety consequences for the public.
+
+While national reports emphasize the scale of the problem, they often rely on condition ratings alone, which do not fully capture the actual risk posed by individual bridges. In practice, bridges with similar structural conditions can present very different levels of danger depending on how heavily they are used. This creates a critical gap in infrastructure assessment, where decision-makers lack a clear method for prioritizing repairs based on both likelihood of failure and potential impact.
+
+This report investigates bridge risk in Omaha (Douglas County) using a risk-based framework that evaluates safety as a function of both failure probability and consequence. Drawing on @fhwaElement2025 element data, the analysis incorporates structural condition indicators (deck, superstructure, and substructure ratings, along with bridge age) and consequence measures such as average daily traffic. By examining how these factors interact, the study identifies bridges where deterioration coincides with high usage, representing the greatest overall risk.
+
+Findings indicate that while most bridges are not at immediate risk of collapse, those with moderate structural degradation and high traffic exposure account for the highest-risk group. These results suggest that infrastructure management should shift from condition-based assessments toward risk-informed prioritization, enabling more effective allocation of maintenance resources and improved public safety outcomes.
 

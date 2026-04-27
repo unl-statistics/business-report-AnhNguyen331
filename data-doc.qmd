@@ -1,0 +1,92 @@
+---
+title: "Data & Method"
+format: html
+---
+
+
+## Business Question
+
+What is the risk of a bridge collapse in Omaha over the next five years, and what interventions should be implemented?
+
+## Research Question
+
+Based on publicly available inspection and transportation data, what is the estimated probability of structural bridge failure in Omaha, and which bridges present the greatest risk when considering both likelihood and consequence?
+
+## Data & Methods
+
+The analysis uses publicly available bridge inspection and transportation datasets from the @fhwaElement2025 and summary reports from the @BridgeNDOT.
+These datasets contain information on bridge conditions, construction characteristics, and traffic volumes for bridges across the United States.
+The Nebraska bridge inventory dataset for 2025 was used to evaluate bridge conditions in **Douglas County**, which includes the city of **Omaha**.
+The purpose of the analysis is to estimate the potential risk of bridge collapse by examining structural condition ratings and transportation usage.
+
+### Data Sources
+
+-   **National Bridge Inventory (NBI)**: A comprehensive dataset maintained by the @fhwaElement2025 that includes inspection results, structural condition ratings, bridge dimensions, construction year, and traffic statistics for bridges in the United States.^[The Nebraska NBI extract was downloaded from the FHWA bridge data portal at <https://www.fhwa.dot.gov/bridge/nbi/ascii.cfm>.]
+-   **Nebraska Department of Transportation Bridge Reports**: Provides summary information on bridge conditions across Nebraska, including counts of structurally deficient or functionally obsolete bridges and maintenance planning data [@BridgeNDOT]. ^[Reports are publicly available at <https://dot.nebraska.gov/media/4efjqkfa/bridge-condition-locally-owned.pdf>.]
+
+### Data Features
+
+The datasets include several variables relevant to evaluating bridge safety and infrastructure risk:
+
+-   **Structural Condition Ratings**: Includes inspection scores for deck condition `DECK_COND_058`, superstructure condition `SUPERSTRUCTURE_COND_059`, and substructure condition `SUBSTRUCTURE_COND_060`.
+    These ratings range from 0 to 9, where higher values represent better structural condition.
+
+-   **Traffic Volume**: Average Daily Traffic `ADT_029` estimates the number of vehicles crossing each bridge per day, indicating the level of transportation demand.
+
+-   **Bridge Age**: Construction year `YEAR_BUILT_027` allows calculation of bridge age, which may influence structural deterioration over time.
+
+-   **Location Information**: Geographic identifiers such as state code and county code allow bridges in Douglas County to be isolated for analysis.
+
+-   **Bridge Dimensions and Characteristics**: Additional variables such as bridge length, roadway width, and number of spans describe the structural characteristics of each bridge
+
+
+#### Missing Data 
+
+Prior to filtering to Douglas County, a missing data assessment was conducted on the key structural condition variables. Missingess was observed primarily in the three condition rating fields (`DECK_COND_58`, `SUPERSTRUCTURE_COND_059`, `SUBSTRUCTURE_COND_060`) and in `ADT_029`. Bridges with missing values in any of these variables were excluded from analysis using `drop_na()`, as these fields are essential for risk classification. It is worth noting that missingness in condition ratings may not be random, smaller or lower-priority structures are sometimes exempt from full NBI inspection requirements, which could mean the excluded bridges are systematically different from those retained. This is a limitation of the analysis.
+
+### Data Collection and Preparation
+
+The Nebraska National Bridge Inventory dataset was downloaded in delimited text format and converted into a CSV file for analysis. The dataset was then imported into the R programming environment. Package versions and system information are documented in @sec-appendix-session.
+
+To focus on the study area, bridges located in Douglas County were selected using the county code variable (`COUNTY_CODE_003 == 55`).
+Data cleaning steps were performed to prepare the dataset for statistical analysis.
+Several inspection variables were initially stored as character values and were converted to numeric format in order to calculate summary statistics.
+Missing or non-numeric values were treated as missing observations and excluded.
+
+Additional variables were created to support analysis.
+Bridge age was calculated by subtracting the construction year from the most current year (2025).
+This variable helps identify older infrastructure that may require increased maintenance or monitoring.
+
+#### Data Classification
+
+To evaluate structural risk, bridges were categorized according to their inspection ratings.
+
+-   **Higher-risk bridges**: Bridges with structural condition ratings of 4 or lower in the deck, superstructure, or substructure categories, indicating poor structural condition or advanced deterioration.
+
+-   **Moderate-condition bridges**: Bridges with ratings between 5 and 6, indicating fair structural condition.
+
+-   **Good-condition bridges**: Bridges with ratings of 7 or higher, representing satisfactory or good structural performance.
+
+This classification aligns with FHWA conventions for identifying structurally deficient bridges and allows the analysis to prioritize structure most in need of intervention.
+
+#### R packages and Software
+
+The analysis was conducted in R. Package versions are recorded in @sec-appendix-session. Key packages used include:
+
+-   **readr:** Used to import the bridge inventory dataset into R [@wickhamReadrReadRectangular2026].
+
+-   **tidyverse:** Used for data manipulation, filtering, and summarization [@wickhamTidyverseEasilyInstall2023].
+
+-   **dplyr:** Used to calculate descriptive statistics and identify high-risk bridges [@wickhamDplyrGrammarData2026].
+
+-   **ggplot2:** Used to create visualizations of bridge condition ratings, traffic levels, and bridge age distributions [@wickhamGgplot2CreateElegant2026].
+
+-   **knitr:** Used to generate the final report and integrate code with written analysis [@KnitrYihuiXie].
+
+-   **scales: ** Used for graphical scales map data to aesthetics [@wickhamScalesScaleFunctions2025].
+
+
+### Analytical Approach
+
+The analysis proceeded in three stages. First, descriptive statistics were calculated to characterize the full sample of Douglas County bridges on key variables: structural condition ratings, bridge age, and traffic volume. Second, a condition rating analysis identified bridges with ratings at or below 4 in any structural component, flagging them as higher-risk. Third, a combined risk assessment cross-tabulated structural condition against traffic exposure (ADT), since bridges that are both structurally compromised and heavily used represent the greatest public safety risk — high likelihood of failure combined with high consequence. Spearman correlation tests were used to assess the monotonic relationships between age, condition, and traffic, given the ordinal nature of the condition rating variables.
+

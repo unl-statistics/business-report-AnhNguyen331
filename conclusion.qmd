@@ -1,0 +1,30 @@
+---
+title: "Conclusion"
+format: html
+---
+
+This analysis examined bridge risk in Omaha using a framework that combines structural condition and traffic exposure. Of the 390 bridges analyzed, only 16 were classified as high risk, indicating that overall risk is concentrated in a small subset of structures. High-risk bridges were substantially older (mean age 69.8 years vs. 40.0 years), and age was moderately associated with poorer condition ($\rho$ = -0.40, p < 0.001). However, traffic volume showed only a weak relationship with condition ($\rho$ = 0.17, p = 0.001), and high-risk bridges carried lower average traffic than lower-risk bridges. These findings suggest that structural deterioration and usage do not always align, reinforcing the need to evaluate both likelihood and consequence when assessing bridge risk.
+
+While informative, this study has several limitations. The analysis relies on publicly available data from the @fhwaElement2025, which may include inconsistencies or missing values. In addition, proxy variables such as condition ratings and traffic volume do not fully capture true failure probability or real-world impact. The focus on a single region limits generalizability, and the absence of observed failure events reduces statistical power and limits predictive modeling.
+
+## Recommendation
+
+Based on the findings, the following are recommended:
+
+::: callout-important
+## Priority Action: Targeted Intervention for High-Risk Bridges
+
+Only 16 of 390 bridges were classified as high risk. Resources should be concentrated on this small subset immediately — these bridges are, on average, nearly 30 years older than lower-risk structures and show clear signs of advanced deterioration. Delaying intervention on this group represents the greatest near-term safety liability.
+:::
+
+::: callout-tip
+## Use a Two-Dimensional Risk Framework
+
+Traffic volume is best understood as a measure of **economic consequence**, not a causal factor in structural deterioration. A bridge in poor condition on a low-traffic road may be structurally unsafe but pose limited disruption if it fails; the same condition rating on a high-traffic corridor represents a much higher societal cost. Maintenance prioritization should therefore weigh structural condition (likelihood of failure) and traffic exposure (consequence of failure) separately, rather than treating either dimension alone as a proxy for overall risk.
+:::
+
+::: callout-note
+## Improve Data Collection for Lower-Traffic Structures
+
+The weak relationship between traffic volume and condition ratings may partly reflect gaps in inspection data for smaller or lower-priority bridges. Standardizing inspection frequency and completeness across all bridge types would improve the reliability of future risk assessments.
+:::
