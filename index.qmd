@@ -198,9 +198,9 @@ Bridge inspection data from the Federal Highway Administration were analyzed for
 summary_table <- tibble(
   Variable = c("Daily Traffic Mean", "Bridge Age (years)"),
   Min = c(adt_min, age_min),
-  Median = c(comma(adt_median, age_median)),
-  Mean = c(comma(adt_mean, age_mean)),
-  Max = c(comma(adt_max, age_max))
+  Median = c(comma(adt_median),comma(age_median)),
+  Mean = c(comma(adt_mean),comma(age_mean)),
+  Max = c(comma(adt_max),comma(age_max))
 )
 kable(summary_table, booktabs = TRUE, digits = 1,
       format.args = list(big.mark = ","))
@@ -274,7 +274,7 @@ ggplot(douglas_bridges, aes(x = ADT_029)) +
   theme_minimal()
 ```
 
-As shown in @fig-adt-distribution, the distribution is right-skewed even on a log scale, with a small number of bridges supporting extremely high traffic volumes (exceeding 100,000 vehicles per day). These high-volume bridges represent critical nodes in Omaha's transportation network where a failure would have the most immediate regional impact.
+As shown in @fig-adt-distribution, the distribution is left-skewed even on a log scale, with a small number of bridges supporting extremely high traffic volumes (exceeding 100,000 vehicles per day). These high-volume bridges represent critical nodes in Omaha's transportation network where a failure would have the most immediate regional impact.
 
 The correlation between deck condition and traffic volume was weak and not statistically significant ($\rho$ = `r round(rho_deck_adt, 2)`, p = `r round(p_deck_adt, 3)`). This is an important finding: bridge condition does not appear to be better or worse on higher-traffic routes, which means high-traffic bridges are not receiving systematically stronger maintenance relative to their exposure.
 
