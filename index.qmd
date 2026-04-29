@@ -6,7 +6,7 @@ This report examines the risk of bridge failure in Omaha, Nebraska over the next
 
 ## Methodology
 
-Bridges were classified as higher-risk if any structural condition rating of deck, superstructure, substructure fell at or below 4, consistent with FHWA conventions. Descriptive statistics and Spearman correlation tests were used to examine relationships between bridge age, structural condition, and Average Daily Traffic (ADT), where ADT served as a proxy for the consequence of failure. 
+Bridges were classified as higher-risk if any structural condition rating of deck, superstructure, substructure fell at or below 4, consistent with FHWA (Federal Highway Association) conventions. Descriptive statistics and Spearman correlation tests were used to examine relationships between bridge age, structural condition, and Average Daily Traffic (ADT), where ADT served as a proxy for the consequence of failure. 
 
 ## Key Findings
 

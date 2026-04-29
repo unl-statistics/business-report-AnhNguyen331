@@ -98,7 +98,7 @@ As shown in @tbl-summary-stat, Average Daily Traffic ranged from `r comma(adt_mi
 
 Bridge age ranged from `r age_min` to `r age_max` years, with a median of `r round(age_median, 1)` years and a mean of `r round(age_mean, 1)` years. The relatively high mean age suggests that a substantial portion of the county's bridge inventory predates modern design standards and may face greater maintenance demands.
 
-The mean deck, superstructure, and substructure ratings were `r round(deck_mean, 2)`, `r round(super_mean, 2)`, and `r round(sub_mean, 2)`, respectively, all falling within the "fair" range (5-6) on the 0-9 NBI scale, while the superstructure mean marginally exceeds the good threshold (≥ 7), indicating the overall structureal inventory is in fair-to good condition.
+The mean deck, superstructure, and substructure ratings were `r round(deck_mean, 2)`, `r round(super_mean, 2)`, and `r round(sub_mean, 2)`, respectively, all falling within the "fair" range (5-6) on the 0-9 NBI scale, while the superstructure mean marginally exceeds the good threshold ($\geq$ 7), indicating the overall structural inventory is in fair-to good condition.
 
 
 ## Structural Condition  
